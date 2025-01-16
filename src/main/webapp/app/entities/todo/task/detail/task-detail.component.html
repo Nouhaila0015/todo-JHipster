@@ -1,0 +1,56 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (task(); as taskRef) {
+      <div>
+        <h2 data-cy="taskDetailsHeading"><span jhiTranslate="todoApp.todoTask.detail.title">Task</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ taskRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="todoApp.todoTask.title">Title</span></dt>
+          <dd>
+            <span>{{ taskRef.title }}</span>
+          </dd>
+          <dt><span jhiTranslate="todoApp.todoTask.description">Description</span></dt>
+          <dd>
+            <span>{{ taskRef.description }}</span>
+          </dd>
+          <dt><span jhiTranslate="todoApp.todoTask.dueDate">Due Date</span></dt>
+          <dd>
+            <span>{{ taskRef.dueDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="todoApp.todoTask.status">Status</span></dt>
+          <dd>
+            <span [jhiTranslate]="'todoApp.TaskStatus.' + (taskRef.status ?? 'null')">{{
+              { null: '', PENDING: 'PENDING', IN_PROGRESS: 'IN_PROGRESS', COMPLETED: 'COMPLETED' }[taskRef.status ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="todoApp.todoTask.todo">Todo</span></dt>
+          <dd>
+            @if (task()!.todo) {
+              <div>
+                <a [routerLink]="['/todo', task()!.todo?.id, 'view']">{{ taskRef.todo?.name }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Retour</span>
+        </button>
+
+        <button type="button" [routerLink]="['/task', taskRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editer</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

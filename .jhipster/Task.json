@@ -1,0 +1,44 @@
+{
+  "annotations": {
+    "changelogDate": "20250116112739"
+  },
+  "applications": "*",
+  "clientRootFolder": "todo",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dueDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "status",
+      "fieldType": "TaskStatus",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "PENDING,IN_PROGRESS,COMPLETED"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Task",
+  "pagination": "infinite-scroll",
+  "relationships": [
+    {
+      "otherEntityField": "name",
+      "otherEntityName": "todo",
+      "relationshipName": "todo",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

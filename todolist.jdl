@@ -1,0 +1,36 @@
+enum TaskStatus {
+    PENDING,
+    IN_PROGRESS,
+    COMPLETED
+}
+
+@definedNullness
+entity Todo {
+    name String required
+    createdAt LocalDate required
+}
+
+entity Task {
+    title String required
+    description String
+    dueDate LocalDate required
+    status TaskStatus required
+}
+
+relationship ManyToOne {
+    Todo{user(login)} to User with builtInEntity
+    Task{todo(name)} to Todo
+}
+
+paginate Todo with infinite-scroll
+paginate Task with infinite-scroll
+
+dto * with mapstruct
+
+service * with serviceClass
+
+search * with elasticsearch
+
+filter Todo, Task
+
+clientRootFolder Todo, Task with todo
