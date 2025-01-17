@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, inject, signal, viewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, OnDestroy, ViewChild, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 
@@ -8,18 +8,21 @@ import { AccountService } from 'app/core/auth/account.service';
 
 @Component({
   selector: 'jhi-login',
-  imports: [SharedModule, FormsModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login.component.html',
+  styleUrl: './login.component.scss',
+  standalone: true,
+  imports: [SharedModule, FormsModule, ReactiveFormsModule, RouterModule],
 })
-export default class LoginComponent implements OnInit, AfterViewInit {
-  username = viewChild.required<ElementRef>('username');
+export default class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('username')
+  username!: ElementRef;
 
   authenticationError = signal(false);
 
   loginForm = new FormGroup({
     username: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     password: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    rememberMe: new FormControl(false, { nonNullable: true, validators: [Validators.required] }),
+    rememberMe: new FormControl(false, { nonNullable: true }),
   });
 
   private readonly accountService = inject(AccountService);
@@ -27,7 +30,9 @@ export default class LoginComponent implements OnInit, AfterViewInit {
   private readonly router = inject(Router);
 
   ngOnInit(): void {
-    // if already authenticated then navigate to home page
+    // Ajouter la classe pour cacher la navbar
+    document.body.classList.add('hide-navbar');
+
     this.accountService.identity().subscribe(() => {
       if (this.accountService.isAuthenticated()) {
         this.router.navigate(['']);
@@ -36,7 +41,12 @@ export default class LoginComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.username().nativeElement.focus();
+    this.username.nativeElement.focus();
+  }
+
+  ngOnDestroy(): void {
+    // Retirer la classe quand on quitte la page
+    document.body.classList.remove('hide-navbar');
   }
 
   login(): void {
@@ -44,7 +54,6 @@ export default class LoginComponent implements OnInit, AfterViewInit {
       next: () => {
         this.authenticationError.set(false);
         if (!this.router.getCurrentNavigation()) {
-          // There were no routing during login (eg from navigationToStoredUrl)
           this.router.navigate(['']);
         }
       },
