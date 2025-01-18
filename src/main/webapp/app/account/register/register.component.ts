@@ -11,8 +11,10 @@ import { RegisterService } from './register.service';
 
 @Component({
   selector: 'jhi-register',
-  imports: [SharedModule, RouterModule, FormsModule, ReactiveFormsModule, PasswordStrengthBarComponent],
   templateUrl: './register.component.html',
+  styleUrl: './register.component.scss',
+  standalone: true,
+  imports: [SharedModule, RouterModule, FormsModule, ReactiveFormsModule, PasswordStrengthBarComponent],
 })
 export default class RegisterComponent implements AfterViewInit {
   login = viewChild.required<ElementRef>('login');
@@ -50,8 +52,18 @@ export default class RegisterComponent implements AfterViewInit {
   private readonly translateService = inject(TranslateService);
   private readonly registerService = inject(RegisterService);
 
+  constructor() {
+    // Ajouter la classe pour cacher la navbar quand le composant est créé
+    document.body.classList.add('hide-navbar');
+  }
+
   ngAfterViewInit(): void {
     this.login().nativeElement.focus();
+  }
+
+  ngOnDestroy(): void {
+    // Retirer la classe quand on quitte la page
+    document.body.classList.remove('hide-navbar');
   }
 
   register(): void {
