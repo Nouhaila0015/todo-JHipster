@@ -87,7 +87,16 @@ export default class DashboardComponent implements OnInit {
   }
 
   deleteTodo(todo: ITodo): void {
-    this.router.navigate(['/todo', todo.id, 'delete']);
+    if (confirm('Êtes-vous sûr de vouloir supprimer cette todo ?')) {
+      this.todoService.delete(todo.id).subscribe(() => {
+        // Recharger la liste des todos après la suppression
+        this.loadTodos();
+        // Si la todo supprimée était sélectionnée, désélectionner
+        if (this.selectedTodo()?.id === todo.id) {
+          this.selectedTodo.set(null);
+        }
+      });
+    }
   }
 
   createTask(): void {
@@ -103,7 +112,12 @@ export default class DashboardComponent implements OnInit {
   }
 
   deleteTask(task: ITask): void {
-    this.router.navigate(['/task', task.id, 'delete']);
+    if (confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?')) {
+      this.taskService.delete(task.id).subscribe(() => {
+        // Recharger les tâches après la suppression
+        this.loadTasks(this.selectedTodo()?.id ?? 0);
+      });
+    }
   }
 
   logout(): void {
