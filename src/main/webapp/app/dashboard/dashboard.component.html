@@ -1,0 +1,86 @@
+<div class="todo-container">
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- User section avec logout -->
+    <div class="user-section">
+      <span class="username">{{ account()?.login }}</span>
+      <button class="icon-btn logout" (click)="logout()">
+        <fa-icon [icon]="'arrow-right'"></fa-icon>
+      </button>
+    </div>
+
+    <!-- Todos List -->
+    <div class="todos-list">
+      <div *ngFor="let todo of todos()" class="todo-item" [class.active]="selectedTodo()?.id === todo.id" (click)="selectTodo(todo)">
+        <span class="todo-name">{{ todo.name }}</span>
+        <div class="todo-actions">
+          <button class="icon-btn edit" (click)="editTodo(todo); $event.stopPropagation()">
+            <fa-icon [icon]="'pencil'" [fixedWidth]="true"></fa-icon>
+          </button>
+          <button class="icon-btn delete" (click)="deleteTodo(todo); $event.stopPropagation()">
+            <fa-icon [icon]="'trash'" [fixedWidth]="true"></fa-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add Todo Button -->
+    <button class="add-btn" (click)="createTodo()">
+      <fa-icon [icon]="'plus'" [fixedWidth]="true"></fa-icon>
+    </button>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Header -->
+    <div class="content-header">
+      <h1>{{ selectedTodo()?.name ?? 'Bienvenue dans DauphinePlanner' }}</h1>
+      <p class="date">{{ today.format('DD/MM/YYYY') }}</p>
+    </div>
+
+    <!-- Welcome Message -->
+    <div *ngIf="!selectedTodo()" class="welcome-message">
+      <p>Sélectionnez une todo dans la barre latérale ou créez-en une nouvelle.</p>
+    </div>
+
+    <!-- Tasks Section -->
+    <div class="tasks-section" *ngIf="selectedTodo()">
+      <!-- Add Task Button -->
+      <button class="add-task-btn" (click)="createTask()">
+        <fa-icon [icon]="'plus'" [fixedWidth]="true"></fa-icon>
+      </button>
+
+      <!-- Tasks List -->
+      <div class="tasks-list">
+        <div *ngFor="let task of tasks()" class="task-item">
+          <input type="checkbox" [checked]="task.status === 'COMPLETED'" (change)="updateTaskStatus(task)" class="task-checkbox" />
+
+          <div class="task-content">
+            <h3 class="task-title">{{ task.title }}</h3>
+            <p class="task-description">{{ task.description }}</p>
+            <div class="task-meta">
+              <span class="due-date" *ngIf="task.dueDate">{{ task.dueDate.format('DD/MM/YYYY') }}</span>
+              <span class="status" [class.completed]="task.status === 'COMPLETED'">
+                {{ task.status }}
+              </span>
+            </div>
+          </div>
+
+          <div class="task-actions">
+            <button class="icon-btn edit" (click)="editTask(task)">
+              <fa-icon [icon]="'pencil'" [fixedWidth]="true"></fa-icon>
+            </button>
+            <button class="icon-btn delete" (click)="deleteTask(task)">
+              <fa-icon [icon]="'trash'" [fixedWidth]="true"></fa-icon>
+            </button>
+          </div>
+        </div>
+
+        <!-- Empty State -->
+        <div *ngIf="tasks().length === 0" class="empty-state">
+          <p>Aucune tâche pour le moment. Cliquez sur + pour en ajouter.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

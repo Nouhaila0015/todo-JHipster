@@ -27,6 +27,17 @@
             </span>
           </a>
         </li>
+        <!-- Ajouter après le lien "Accueil" -->
+        @if (account() !== null) {
+          <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+            <a class="nav-link" routerLink="/dashboard" (click)="collapseNavbar()">
+              <span>
+                <fa-icon icon="th-large"></fa-icon>
+                <span>Dashboard</span>
+              </span>
+            </a>
+          </li>
+        }
         <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
         @if (account() !== null) {
           <li

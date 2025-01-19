@@ -54,7 +54,7 @@ export default class LoginComponent implements OnInit, AfterViewInit, OnDestroy 
       next: () => {
         this.authenticationError.set(false);
         if (!this.router.getCurrentNavigation()) {
-          this.router.navigate(['']);
+          this.router.navigate(['/dashboard']);
         }
       },
       error: () => this.authenticationError.set(true),

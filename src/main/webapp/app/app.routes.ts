@@ -37,6 +37,13 @@ const routes: Routes = [
     path: '',
     loadChildren: () => import(`./entities/entity.routes`),
   },
+  {
+    path: 'dashboard',
+    loadComponent: () => import('./dashboard/dashboard.component').then(m => m.default),
+    data: {
+      authorities: [Authority.USER],
+    },
+  },
   ...errorRoute,
 ];
 

@@ -247,3 +247,16 @@ body {
     overflow-x: hidden;
   }
 }
+
+body.hide-navbar {
+  jhi-navbar {
+    display: none !important;
+  }
+
+  margin-top: 0 !important;
+}
+
+// Restaurer pour les autres pages
+body:not(.hide-navbar) {
+  margin-top: 4rem;
+}
